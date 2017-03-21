@@ -2,7 +2,7 @@ provider "aws" {
   region = "${var.region}"
 }
 
-module "vpcd" {
+module "vpc" {
   source        = "github.com/btburton42/tf_vpc.git?ref=v0.0.1"
   name          = "web"
   cidr          = "${var.region} != "us-west-2" ? "172.16.0.0/12" : "172.18.0.0/12"}"

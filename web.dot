@@ -1,0 +1,50 @@
+digraph {
+	compound = "true"
+	newrank = "true"
+	subgraph "root" {
+		"[root] aws_elb.web" [label = "aws_elb.web", shape = "box"]
+		"[root] aws_instance.web" [label = "aws_instance.web", shape = "box"]
+		"[root] aws_security_group.web_host_sg" [label = "aws_security_group.web_host_sg", shape = "box"]
+		"[root] aws_security_group.web_inbound_sg" [label = "aws_security_group.web_inbound_sg", shape = "box"]
+		"[root] module.vpc.aws_internet_gateway.tfb" [label = "module.vpc.aws_internet_gateway.tfb", shape = "box"]
+		"[root] module.vpc.aws_route.internet_access" [label = "module.vpc.aws_route.internet_access", shape = "box"]
+		"[root] module.vpc.aws_subnet.public" [label = "module.vpc.aws_subnet.public", shape = "box"]
+		"[root] module.vpc.aws_vpc.tfb" [label = "module.vpc.aws_vpc.tfb", shape = "box"]
+		"[root] module.vpc.provider.aws" [label = "module.vpc.provider.aws", shape = "diamond"]
+		"[root] provider.aws" [label = "provider.aws", shape = "diamond"]
+		"[root] aws_elb.web" -> "[root] aws_instance.web"
+		"[root] aws_elb.web" -> "[root] aws_security_group.web_inbound_sg"
+		"[root] aws_instance.web" -> "[root] aws_security_group.web_host_sg"
+		"[root] aws_instance.web" -> "[root] module.vpc.output.public_subnet_id"
+		"[root] aws_instance.web" -> "[root] var.ami"
+		"[root] aws_instance.web" -> "[root] var.environment"
+		"[root] aws_instance.web" -> "[root] var.instance_ips"
+		"[root] aws_instance.web" -> "[root] var.instance_type"
+		"[root] aws_instance.web" -> "[root] var.owner_tag"
+		"[root] aws_security_group.web_host_sg" -> "[root] module.vpc.output.cidr"
+		"[root] aws_security_group.web_host_sg" -> "[root] module.vpc.output.vpc_id"
+		"[root] aws_security_group.web_inbound_sg" -> "[root] module.vpc.output.vpc_id"
+		"[root] module.vpc.aws_internet_gateway.tfb" -> "[root] module.vpc.aws_vpc.tfb"
+		"[root] module.vpc.aws_route.internet_access" -> "[root] module.vpc.aws_internet_gateway.tfb"
+		"[root] module.vpc.aws_subnet.public" -> "[root] module.vpc.aws_vpc.tfb"
+		"[root] module.vpc.aws_subnet.public" -> "[root] module.vpc.var.public_subnet"
+		"[root] module.vpc.aws_vpc.tfb" -> "[root] module.vpc.provider.aws"
+		"[root] module.vpc.aws_vpc.tfb" -> "[root] module.vpc.var.cidr"
+		"[root] module.vpc.aws_vpc.tfb" -> "[root] module.vpc.var.enable_dns_hostnames"
+		"[root] module.vpc.aws_vpc.tfb" -> "[root] module.vpc.var.enable_dns_support"
+		"[root] module.vpc.aws_vpc.tfb" -> "[root] module.vpc.var.name"
+		"[root] module.vpc.output.cidr" -> "[root] module.vpc.aws_vpc.tfb"
+		"[root] module.vpc.output.public_subnet_id" -> "[root] module.vpc.aws_subnet.public"
+		"[root] module.vpc.output.vpc_id" -> "[root] module.vpc.aws_vpc.tfb"
+		"[root] module.vpc.provider.aws" -> "[root] provider.aws"
+		"[root] output.addresses" -> "[root] aws_instance.web"
+		"[root] output.elb_address" -> "[root] aws_elb.web"
+		"[root] output.public_subnet_id" -> "[root] module.vpc.output.public_subnet_id"
+		"[root] provider.aws" -> "[root] var.region"
+		"[root] root" -> "[root] module.vpc.aws_route.internet_access"
+		"[root] root" -> "[root] output.addresses"
+		"[root] root" -> "[root] output.elb_address"
+		"[root] root" -> "[root] output.public_subnet_id"
+	}
+}
+

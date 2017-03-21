@@ -3,25 +3,25 @@ provider "aws" {
 }
 
 module "vpc" {
-  source        = "github.com/btburton42/tf_vpc.git?ref=v0.0.1"
+  source        = "github.com/btburton42/tf_vpc.git?ref=v0.0.2"
   name          = "web"
-  cidr          = "${var.region} != "us-west-2" ? "172.16.0.0/12" : "172.18.0.0/12"}"
+  cidr          = "10.0.0.0/16"
+  public_subnet = "10.0.1.0/24"
 }
 
 resource "aws_instance" "web" {
   ami = "${lookup(var.ami, var.region)}"
   instance_type = "${var.instance_type}"
-  key_name = "${var.key_name}"
   subnet_id = "${module.vpc.public_subnet_id}"
   private_ip = "${var.instance_ips[count.index]}"
   user_data = "${file("files/web_bootstrap.sh")}"
-  associate_with_private_ip = true
+  associate_public_ip_address = true
   vpc_security_group_ids = [
     "${aws_security_group.web_host_sg.id}"
   ]
   tags {
     Name = "web-${format("%03d", count.index)}"
-    Owner = "${element(var.owner_tag[count.index])}"
+    Owner = "${element(var.owner_tag, count.index)}"
   }
   count = "${var.environment == "production" ? 4 : 2}"
 }

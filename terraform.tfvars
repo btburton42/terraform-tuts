@@ -1,3 +1,3 @@
 ami = {
-  us-west-2 = "ami-071c8b37"
+  us-west-2 = "ami-adc946cd"
 }

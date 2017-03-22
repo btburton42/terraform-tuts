@@ -25,3 +25,7 @@ variable "owner_tag" {
 variable "environment" {
   default = "development"
 }
+
+variable "key_path" {
+  default = "/Users/tyler.burton/.ssh/aws_keys/TestKeyPair.pem"
+}
